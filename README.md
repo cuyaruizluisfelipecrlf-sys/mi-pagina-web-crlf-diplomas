@@ -1,1 +1,135 @@
 # mi-pagina-web-crlf-diplomas
+import { useEffect, useRef } from "react";
+
+export default function App() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&@*";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00bcd4";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    const interval = setInterval(draw, 33);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative min-h-screen text-gray-900 overflow-hidden bg-white">
+      {/* Background */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-cyan-300 rounded-full blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-yellow-300 rounded-full blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-cyan-200/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      </div>
+
+      {/* Canvas effect */}
+      <canvas ref={canvasRef} className="absolute inset-0 z-10 opacity-20" />
+
+      {/* Content */}
+      <div className="relative z-20">
+        {/* Header */}
+        <header className="flex justify-between items-center p-6 max-w-6xl mx-auto">
+          <h1 className="text-2xl font-bold tracking-wide">Diplomas Lalo</h1>
+          <nav className="space-x-6 text-sm text-gray-700">
+            <a href="#" className="hover:text-cyan-600">Inicio</a>
+            <a href="#productos" className="hover:text-cyan-600">Productos</a>
+            <a href="#contacto" className="hover:text-cyan-600">Contacto</a>
+          </nav>
+        </header>
+
+        {/* Hero (más grande) */}
+        <section className="text-center py-32 px-6">
+          <h2 className="text-5xl font-bold mb-4">Bienvenido a Diplomas Lalo</h2>
+          <p className="text-gray-600 max-w-xl mx-auto">
+            Plataforma elegante para gestión y emisión de diplomas personalizados.
+          </p>
+          <button
+            className="mt-8 px-6 py-3 bg-cyan-500 text-white rounded-full font-semibold hover:bg-yellow-400 hover:text-black transition"
+            onClick={() => window.location.href="https://es.scribd.com/document/950950551/Lista-de-Precios-Digital-2025"}
+          >
+            Ver catálogo
+          </button>
+        </section>
+
+        {/* Productos */}
+        <section id="productos" className="max-w-6xl mx-auto px-6 py-16">
+          <h3 className="text-3xl font-bold mb-8 text-center">Tipos de Diplomas</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { name: "Inicial", desc: "Certificados de estudios y logros" },
+              { name: "Primaria", desc: "Reconocimientos académicos básicos" },
+              { name: "Secundaria", desc: "Premios y distinciones escolares" }
+            ].map((item, i) => (
+              <div key={i} className="bg-cyan-500 shadow-md p-6 rounded-2xl hover:shadow-xl transition">
+                <h4 className="text-xl font-semibold mb-2 text-white drop-shadow-sm">{item.name}</h4>
+                <p className="text-white/90 text-sm drop-shadow-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Comentarios */}
+        <section className="max-w-6xl mx-auto px-6 py-20">
+          <h3 className="text-3xl font-bold mb-10 text-center">Opiniones de clientes</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { name: "Carlos R.", comment: "Excelente calidad de diplomas, muy recomendado." },
+              { name: "María P.", comment: "Rápido y confiable, buen servicio." },
+              { name: "Jorge L.", comment: "Mis alumnos quedaron felices con sus certificados." }
+            ].map((item, i) => (
+              <div key={i} className="bg-white border shadow-md rounded-2xl p-4">
+                <div className="h-40 bg-gray-200 rounded-xl mb-4"></div>
+                <p className="text-gray-700 text-sm mb-2">"{item.comment}"</p>
+                <p className="text-cyan-600 font-semibold text-sm">- {item.name}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Contacto */}
+        <section id="contacto" className="text-center py-20 px-6">
+          <h3 className="text-3xl font-bold mb-4">Contáctanos</h3>
+          <p className="text-gray-600 mb-6">Solicita tu catálogo</p>
+          <button
+            className="mx-auto px-6 py-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition flex items-center justify-center gap-2"
+            onClick={() => window.location.href="https://wa.me/51940265054"}
+          >
+            <span>📲</span> Contáctanos por WhatsApp
+          </button>
+        </section>
+
+        {/* Footer */}
+        <footer className="text-center text-gray-500 py-6 text-sm">
+          © 2026 Diplomas Lalo. Todos los derechos reservados.
+        </footer>
+      </div>
+    </div>
+  );
+}
